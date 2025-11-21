@@ -17,14 +17,10 @@ function createWindow() {
       nodeIntegration: false,
       contextIsolation: true,
       enableRemoteModule: false
-    },
-    icon: path.join(__dirname, 'build/icon.png')
+    }
   });
 
   mainWindow.loadFile('index.html');
-  
-  // Abre dev tools em desenvolvimento (comentar em produção)
-  // mainWindow.webContents.openDevTools();
 
   mainWindow.on('closed', () => {
     mainWindow = null;
@@ -76,27 +72,4 @@ ipcMain.handle('db:export', async (event, data) => {
 // IPC - Importar JSON
 ipcMain.handle('db:import', async (event, data) => {
   try {
-    return { success: true, data: data };
-  } catch (error) {
-    return { success: false, error: error.message };
-  }
-});
-
-app.on('ready', createWindow);
-
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
-});
-
-app.on('activate', () => {
-  if (mainWindow === null) {
-    createWindow();
-  }
-});
-
-// Handle squirrel events (Windows installer)
-if (require('electron-squirrel-startup')) {
-  app.quit();
-}
+    return { success: true, data: da
