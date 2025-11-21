@@ -1,0 +1,1505 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciador de Periféricos</title>
+    <style>
+        :root {
+  /* Primitive Color Tokens */
+  --color-white: rgba(255, 255, 255, 1);
+  --color-black: rgba(0, 0, 0, 1);
+  --color-cream-50: rgba(252, 252, 249, 1);
+  --color-cream-100: rgba(255, 255, 253, 1);
+  --color-gray-200: rgba(245, 245, 245, 1);
+  --color-gray-300: rgba(167, 169, 169, 1);
+  --color-gray-400: rgba(119, 124, 124, 1);
+  --color-slate-500: rgba(98, 108, 113, 1);
+  --color-brown-600: rgba(94, 82, 64, 1);
+  --color-charcoal-700: rgba(31, 33, 33, 1);
+  --color-charcoal-800: rgba(38, 40, 40, 1);
+  --color-slate-900: rgba(19, 52, 59, 1);
+  --color-teal-300: rgba(50, 184, 198, 1);
+  --color-teal-400: rgba(45, 166, 178, 1);
+  --color-teal-500: rgba(33, 128, 141, 1);
+  --color-teal-600: rgba(29, 116, 128, 1);
+  --color-teal-700: rgba(26, 104, 115, 1);
+  --color-teal-800: rgba(41, 150, 161, 1);
+  --color-red-400: rgba(255, 84, 89, 1);
+  --color-red-500: rgba(192, 21, 47, 1);
+  --color-orange-400: rgba(230, 129, 97, 1);
+  --color-orange-500: rgba(168, 75, 47, 1);
+
+  --color-brown-600-rgb: 94, 82, 64;
+  --color-teal-500-rgb: 33, 128, 141;
+  --color-slate-900-rgb: 19, 52, 59;
+  --color-slate-500-rgb: 98, 108, 113;
+  --color-red-500-rgb: 192, 21, 47;
+  --color-red-400-rgb: 255, 84, 89;
+  --color-orange-500-rgb: 168, 75, 47;
+  --color-orange-400-rgb: 230, 129, 97;
+
+  --color-bg-1: rgba(59, 130, 246, 0.08);
+  --color-bg-2: rgba(245, 158, 11, 0.08);
+  --color-bg-3: rgba(34, 197, 94, 0.08);
+  --color-bg-4: rgba(239, 68, 68, 0.08);
+  --color-bg-5: rgba(147, 51, 234, 0.08);
+  --color-bg-6: rgba(249, 115, 22, 0.08);
+  --color-bg-7: rgba(236, 72, 153, 0.08);
+  --color-bg-8: rgba(6, 182, 212, 0.08);
+
+  --color-background: var(--color-cream-50);
+  --color-surface: var(--color-cream-100);
+  --color-text: var(--color-slate-900);
+  --color-text-secondary: var(--color-slate-500);
+  --color-primary: var(--color-teal-500);
+  --color-primary-hover: var(--color-teal-600);
+  --color-primary-active: var(--color-teal-700);
+  --color-secondary: rgba(var(--color-brown-600-rgb), 0.12);
+  --color-secondary-hover: rgba(var(--color-brown-600-rgb), 0.2);
+  --color-secondary-active: rgba(var(--color-brown-600-rgb), 0.25);
+  --color-border: rgba(var(--color-brown-600-rgb), 0.2);
+  --color-btn-primary-text: var(--color-cream-50);
+  --color-card-border: rgba(var(--color-brown-600-rgb), 0.12);
+  --color-card-border-inner: rgba(var(--color-brown-600-rgb), 0.12);
+  --color-error: var(--color-red-500);
+  --color-success: var(--color-teal-500);
+  --color-warning: var(--color-orange-500);
+  --color-info: var(--color-slate-500);
+  --color-focus-ring: rgba(var(--color-teal-500-rgb), 0.4);
+  --color-select-caret: rgba(var(--color-slate-900-rgb), 0.8);
+
+  --focus-ring: 0 0 0 3px var(--color-focus-ring);
+  --focus-outline: 2px solid var(--color-primary);
+  --status-bg-opacity: 0.15;
+  --status-border-opacity: 0.25;
+
+  --color-success-rgb: 33, 128, 141;
+  --color-error-rgb: 192, 21, 47;
+  --color-warning-rgb: 168, 75, 47;
+  --color-info-rgb: 98, 108, 113;
+
+  --font-family-base: "FKGroteskNeue", "Geist", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-family-mono: "Berkeley Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-size-xs: 11px;
+  --font-size-sm: 12px;
+  --font-size-base: 14px;
+  --font-size-md: 14px;
+  --font-size-lg: 16px;
+  --font-size-xl: 18px;
+  --font-size-2xl: 20px;
+  --font-size-3xl: 24px;
+  --font-size-4xl: 30px;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 550;
+  --font-weight-bold: 600;
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.5;
+  --letter-spacing-tight: -0.01em;
+
+  --space-0: 0;
+  --space-1: 1px;
+  --space-2: 2px;
+  --space-4: 4px;
+  --space-6: 6px;
+  --space-8: 8px;
+  --space-10: 10px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-20: 20px;
+  --space-24: 24px;
+  --space-32: 32px;
+
+  --radius-sm: 6px;
+  --radius-base: 8px;
+  --radius-md: 10px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.02);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.04), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.04), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+  --shadow-inset-sm: inset 0 1px 0 rgba(255, 255, 255, 0.15), inset 0 -1px 0 rgba(0, 0, 0, 0.03);
+
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 1024px;
+  --container-xl: 1280px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-gray-400-rgb: 119, 124, 124;
+    --color-teal-300-rgb: 50, 184, 198;
+    --color-gray-300-rgb: 167, 169, 169;
+    --color-gray-200-rgb: 245, 245, 245;
+
+    --color-bg-1: rgba(29, 78, 216, 0.15);
+    --color-bg-2: rgba(180, 83, 9, 0.15);
+    --color-bg-3: rgba(21, 128, 61, 0.15);
+    --color-bg-4: rgba(185, 28, 28, 0.15);
+    --color-bg-5: rgba(107, 33, 168, 0.15);
+    --color-bg-6: rgba(194, 65, 12, 0.15);
+    --color-bg-7: rgba(190, 24, 93, 0.15);
+    --color-bg-8: rgba(8, 145, 178, 0.15);
+
+    --color-background: var(--color-charcoal-700);
+    --color-surface: var(--color-charcoal-800);
+    --color-text: var(--color-gray-200);
+    --color-text-secondary: rgba(var(--color-gray-300-rgb), 0.7);
+    --color-primary: var(--color-teal-300);
+    --color-primary-hover: var(--color-teal-400);
+    --color-primary-active: var(--color-teal-800);
+    --color-secondary: rgba(var(--color-gray-400-rgb), 0.15);
+    --color-secondary-hover: rgba(var(--color-gray-400-rgb), 0.25);
+    --color-secondary-active: rgba(var(--color-gray-400-rgb), 0.3);
+    --color-border: rgba(var(--color-gray-400-rgb), 0.3);
+    --color-error: var(--color-red-400);
+    --color-success: var(--color-teal-300);
+    --color-warning: var(--color-orange-400);
+    --color-info: var(--color-gray-300);
+    --color-focus-ring: rgba(var(--color-teal-300-rgb), 0.4);
+    --color-btn-primary-text: var(--color-slate-900);
+    --color-card-border: rgba(var(--color-gray-400-rgb), 0.2);
+    --color-card-border-inner: rgba(var(--color-gray-400-rgb), 0.15);
+    --shadow-inset-sm: inset 0 1px 0 rgba(255, 255, 255, 0.1), inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+    --color-select-caret: rgba(var(--color-gray-200-rgb), 0.8);
+
+    --color-success-rgb: var(--color-teal-300-rgb);
+    --color-error-rgb: var(--color-red-400-rgb);
+    --color-warning-rgb: var(--color-orange-400-rgb);
+    --color-info-rgb: var(--color-gray-300-rgb);
+  }
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family-base);
+  background-color: var(--color-background);
+  color: var(--color-text);
+  line-height: var(--line-height-normal);
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--space-24);
+}
+
+header {
+  text-align: center;
+  margin-bottom: var(--space-32);
+}
+
+h1 {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  margin-bottom: var(--space-8);
+}
+
+.subtitle {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-lg);
+}
+
+.tabs {
+  display: flex;
+  gap: var(--space-8);
+  margin-bottom: var(--space-24);
+  border-bottom: 2px solid var(--color-border);
+  flex-wrap: wrap;
+}
+
+.tab {
+  padding: var(--space-12) var(--space-24);
+  background: none;
+  border: none;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-standard);
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+}
+
+.tab:hover {
+  color: var(--color-text);
+}
+
+.tab.active {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+.card {
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-card-border);
+  padding: var(--space-24);
+  box-shadow: var(--shadow-sm);
+}
+
+.form-group {
+  margin-bottom: var(--space-20);
+}
+
+label {
+  display: block;
+  font-weight: var(--font-weight-medium);
+  margin-bottom: var(--space-8);
+  color: var(--color-text);
+  font-size: var(--font-size-sm);
+}
+
+label .required {
+  color: var(--color-error);
+}
+
+input[type="text"],
+input[type="number"],
+input[type="file"],
+select,
+textarea {
+  width: 100%;
+  padding: var(--space-10) var(--space-12);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-base);
+  font-size: var(--font-size-base);
+  font-family: var(--font-family-base);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  transition: border-color var(--duration-fast) var(--ease-standard);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.tag-input-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+  padding: var(--space-8);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-base);
+  background-color: var(--color-surface);
+  min-height: 46px;
+}
+
+.tag-item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  padding: var(--space-4) var(--space-10);
+  background-color: var(--color-secondary);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+}
+
+.tag-remove {
+  cursor: pointer;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-secondary);
+  transition: color var(--duration-fast);
+}
+
+.tag-remove:hover {
+  color: var(--color-error);
+}
+
+.tag-input {
+  flex: 1;
+  min-width: 120px;
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: var(--space-4);
+  font-size: var(--font-size-base);
+  color: var(--color-text);
+}
+
+.btn {
+  padding: var(--space-10) var(--space-20);
+  border: none;
+  border-radius: var(--radius-base);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all var(--duration-normal) var(--ease-standard);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: var(--color-btn-primary-text);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-hover);
+}
+
+.btn-secondary {
+  background-color: var(--color-secondary);
+  color: var(--color-text);
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-secondary-hover);
+}
+
+.btn-danger {
+  background-color: var(--color-error);
+  color: var(--color-white);
+}
+
+.btn-danger:hover {
+  opacity: 0.9;
+}
+
+.btn-small {
+  padding: var(--space-6) var(--space-12);
+  font-size: var(--font-size-sm);
+}
+
+.btn-group {
+  display: flex;
+  gap: var(--space-12);
+  flex-wrap: wrap;
+}
+
+.message {
+  padding: var(--space-12) var(--space-16);
+  border-radius: var(--radius-base);
+  margin-bottom: var(--space-16);
+  font-size: var(--font-size-sm);
+  border: 1px solid;
+}
+
+.message-success {
+  background-color: rgba(var(--color-success-rgb), var(--status-bg-opacity));
+  color: var(--color-success);
+  border-color: rgba(var(--color-success-rgb), var(--status-border-opacity));
+}
+
+.message-error {
+  background-color: rgba(var(--color-error-rgb), var(--status-bg-opacity));
+  color: var(--color-error);
+  border-color: rgba(var(--color-error-rgb), var(--status-border-opacity));
+}
+
+.peripheral-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-16);
+  margin-top: var(--space-24);
+}
+
+.peripheral-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-card-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-16);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--duration-normal) var(--ease-standard);
+}
+
+.peripheral-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.peripheral-image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: var(--radius-base);
+  margin-bottom: var(--space-12);
+  background-color: var(--color-secondary);
+}
+
+.peripheral-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--space-4);
+  color: var(--color-text);
+}
+
+.peripheral-brand {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-8);
+}
+
+.peripheral-type {
+  display: inline-block;
+  padding: var(--space-4) var(--space-10);
+  background-color: var(--color-bg-1);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  margin-bottom: var(--space-8);
+}
+
+.peripheral-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-6);
+  margin-bottom: var(--space-12);
+}
+
+.peripheral-tag {
+  padding: var(--space-2) var(--space-8);
+  background-color: var(--color-secondary);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}
+
+.peripheral-quantity {
+  font-weight: var(--font-weight-medium);
+  margin-bottom: var(--space-12);
+  color: var(--color-text);
+}
+
+.peripheral-actions {
+  display: flex;
+  gap: var(--space-8);
+}
+
+.search-bar {
+  display: flex;
+  gap: var(--space-12);
+  margin-bottom: var(--space-24);
+  flex-wrap: wrap;
+}
+
+.search-bar input,
+.search-bar select {
+  flex: 1;
+  min-width: 200px;
+}
+
+.report-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-16);
+  margin-bottom: var(--space-32);
+}
+
+.report-card {
+  background-color: var(--color-bg-1);
+  padding: var(--space-20);
+  border-radius: var(--radius-lg);
+  text-align: center;
+}
+
+.report-card:nth-child(2) {
+  background-color: var(--color-bg-2);
+}
+
+.report-card:nth-child(3) {
+  background-color: var(--color-bg-3);
+}
+
+.report-value {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  margin-bottom: var(--space-4);
+}
+
+.report-label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.report-by-type {
+  margin-top: var(--space-32);
+}
+
+.type-count {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--space-12);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-card-border);
+  border-radius: var(--radius-base);
+  margin-bottom: var(--space-8);
+}
+
+.type-name {
+  font-weight: var(--font-weight-medium);
+}
+
+.type-value {
+  color: var(--color-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+.image-preview {
+  margin-top: var(--space-12);
+  text-align: center;
+}
+
+.image-preview img {
+  max-width: 200px;
+  max-height: 200px;
+  border-radius: var(--radius-base);
+  border: 1px solid var(--color-border);
+}
+
+.empty-state {
+  text-align: center;
+  padding: var(--space-32);
+  color: var(--color-text-secondary);
+}
+
+.empty-state-icon {
+  font-size: var(--font-size-4xl);
+  margin-bottom: var(--space-16);
+}
+
+/* View mode toggle buttons */
+.view-toggle {
+  display: flex;
+  gap: var(--space-8);
+  margin-bottom: var(--space-16);
+}
+
+.view-toggle-btn {
+  padding: var(--space-8) var(--space-16);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  border-radius: var(--radius-base);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all var(--duration-normal) var(--ease-standard);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+}
+
+.view-toggle-btn:hover {
+  background-color: var(--color-secondary-hover);
+}
+
+.view-toggle-btn.active {
+  background-color: var(--color-primary);
+  color: var(--color-btn-primary-text);
+  border-color: var(--color-primary);
+}
+
+/* Grid view styles */
+.peripheral-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--space-16);
+  margin-top: var(--space-16);
+}
+
+.peripheral-grid-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-card-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-16);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--duration-normal) var(--ease-standard);
+  display: flex;
+  flex-direction: column;
+}
+
+.peripheral-grid-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.peripheral-grid-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: var(--radius-base);
+  margin-bottom: var(--space-12);
+  background-color: var(--color-secondary);
+}
+
+.peripheral-grid-brand {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-4);
+  font-weight: var(--font-weight-medium);
+}
+
+.peripheral-grid-name {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--space-8);
+  color: var(--color-text);
+}
+
+.peripheral-grid-type {
+  display: inline-block;
+  padding: var(--space-4) var(--space-10);
+  background-color: var(--color-bg-1);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  margin-bottom: var(--space-8);
+}
+
+.peripheral-grid-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-6);
+  margin-bottom: var(--space-12);
+}
+
+.peripheral-grid-quantity {
+  font-weight: var(--font-weight-medium);
+  margin-bottom: var(--space-12);
+  color: var(--color-text);
+  font-size: var(--font-size-sm);
+}
+
+.peripheral-grid-actions {
+  display: flex;
+  gap: var(--space-8);
+  margin-top: auto;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Estilos para tabela */
+table th, table td {
+  padding: var(--space-12);
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+table th {
+  background: var(--color-secondary);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+table tr:hover {
+  background: var(--color-bg-1);
+}
+table td button {
+  margin-right: var(--space-4);
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: var(--space-16);
+  }
+
+  .tabs {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+  }
+
+  .peripheral-list {
+    grid-template-columns: 1fr;
+  }
+
+  .report-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .search-bar {
+    flex-direction: column;
+  }
+
+  .search-bar input,
+  .search-bar select {
+    width: 100%;
+  }
+  
+  table th, table td {
+    padding: var(--space-8);
+    font-size: var(--font-size-sm);
+  }
+
+  .peripheral-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .view-toggle {
+    flex-direction: column;
+  }
+
+  .view-toggle-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+    </style>
+    <style>
+        @keyframes slideInUp {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOutDown {
+            from {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📦 Gerenciador de Periféricos</h1>
+            <p class="subtitle">Sistema de controle de estoque e inventário</p>
+        </header>
+
+        <div class="tabs">
+            <button class="tab active" data-tab="lista">📋 Lista/Busca</button>
+            <button class="tab" data-tab="cadastro">📝 Cadastro</button>
+            <button class="tab" data-tab="relatorio">📊 Relatório</button>
+        </div>
+
+        <!-- Cadastro Tab -->
+        <div id="cadastro" class="tab-content">
+            <div class="card">
+                <h2 style="margin-bottom: var(--space-24); font-size: var(--font-size-2xl);">Cadastrar Novo Periférico</h2>
+                <div id="cadastro-message"></div>
+                <form id="peripheral-form">
+                    <div class="form-group">
+                        <label>Marca</label>
+                        <input type="text" id="marca">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Nome</label>
+                        <input type="text" id="nome">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Tipo</label>
+                        <select id="tipo">
+                            <option value="">Selecione um tipo</option>
+                            <option value="Cabo">Cabo</option>
+                            <option value="Mouse">Mouse</option>
+                            <option value="Teclado">Teclado</option>
+                            <option value="Monitor">Monitor</option>
+                            <option value="Webcam">Webcam</option>
+                            <option value="Microfone">Microfone</option>
+                            <option value="Headset">Headset</option>
+                            <option value="Hub USB">Hub USB</option>
+                            <option value="Carregador">Carregador</option>
+                            <option value="Adaptador">Adaptador</option>
+                            <option value="Outro">Outro</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Tags</label>
+                        <div class="tag-input-container" id="tag-container">
+                            <input type="text" class="tag-input" id="tag-input" placeholder="Digite e pressione Enter">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Quantidade</label>
+                        <input type="number" id="quantidade" min="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Foto</label>
+                        <input type="file" id="foto" accept="image/*">
+                        <div id="image-preview" class="image-preview"></div>
+                    </div>
+
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-primary">✓ Salvar Periférico</button>
+                        <button type="button" class="btn btn-secondary" id="cancel-edit">✕ Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Lista/Busca Tab -->
+        <div id="lista" class="tab-content active">
+            <div class="card">
+                <h2 style="margin-bottom: var(--space-24); font-size: var(--font-size-2xl);">Lista/Busca de Periféricos</h2>
+
+                <!-- View Mode Toggle -->
+                <div class="view-toggle">
+                    <button class="view-toggle-btn active" id="view-list-btn" data-view="list">
+                        <span>📋</span>
+                        <span>Visualização em Lista</span>
+                    </button>
+                    <button class="view-toggle-btn" id="view-grid-btn" data-view="grid">
+                        <span>⊞</span>
+                        <span>Visualização em Grid</span>
+                    </button>
+                </div>
+
+                <!-- BUSCA: filtros -->
+                <div class="search-bar" style="margin-bottom: var(--space-16);">
+                    <input type="text" id="search-text" placeholder="Buscar por nome, marca ou tags...">
+                    <select id="search-tipo">
+                        <option value="">Todos os tipos</option>
+                        <option value="Cabo">Cabo</option>
+                        <option value="Mouse">Mouse</option>
+                        <option value="Teclado">Teclado</option>
+                        <option value="Monitor">Monitor</option>
+                        <option value="Webcam">Webcam</option>
+                        <option value="Microfone">Microfone</option>
+                        <option value="Headset">Headset</option>
+                        <option value="Hub USB">Hub USB</option>
+                        <option value="Carregador">Carregador</option>
+                        <option value="Adaptador">Adaptador</option>
+                        <option value="Outro">Outro</option>
+                    </select>
+                </div>
+
+                <div id="lista-message"></div>
+                
+                <!-- List View (Table) -->
+                <div id="peripheral-table-wrap" style="overflow-x:auto;">
+                  <table id="peripheral-table" style="width:100%; border-collapse: collapse;">
+                      <thead>
+                        <tr>
+                          <th>Foto</th>
+                          <th>Marca</th>
+                          <th>Nome</th>
+                          <th>Tipo</th>
+                          <th>Tags</th>
+                          <th>Quantidade</th>
+                          <th>Ações</th>
+                        </tr>
+                      </thead>
+                      <tbody id="peripheral-table-body"></tbody>
+                  </table>
+                </div>
+
+                <!-- Grid View -->
+                <div id="peripheral-grid" class="peripheral-grid hidden"></div>
+            </div>
+        </div>
+
+        <!-- Relatório Tab -->
+        <div id="relatorio" class="tab-content">
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-24); flex-wrap: wrap; gap: var(--space-12);">
+                    <h2 style="font-size: var(--font-size-2xl); margin: 0;">Relatório de Estoque</h2>
+                    <div class="btn-group">
+                        <button class="btn btn-primary" id="export-json">⬇ Exportar JSON</button>
+                        <button class="btn btn-secondary" id="import-json-btn">⬆ Importar JSON</button>
+                        <input type="file" id="import-json" accept=".json" style="display: none;">
+                    </div>
+                </div>
+                
+                <div class="report-grid">
+                    <div class="report-card">
+                        <div class="report-value" id="total-items">0</div>
+                        <div class="report-label">Total de Itens</div>
+                    </div>
+                    <div class="report-card">
+                        <div class="report-value" id="total-types">0</div>
+                        <div class="report-label">Tipos Diferentes</div>
+                    </div>
+                    <div class="report-card">
+                        <div class="report-value" id="total-stock">0</div>
+                        <div class="report-label">Estoque Total</div>
+                    </div>
+                </div>
+
+                <div class="report-by-type">
+                    <h3 style="margin-bottom: var(--space-16); font-size: var(--font-size-xl);">Contagem por Tipo</h3>
+                    <div id="type-counts"></div>
+                </div>
+
+                <div style="margin-top: var(--space-32);">
+                    <h3 style="margin-bottom: var(--space-16); font-size: var(--font-size-xl);">Inventário Completo</h3>
+                    <div id="report-list" class="peripheral-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data storage - Electron IPC with localStorage fallback
+        const STORAGE_KEY = 'perifericos_app_dados';
+        let peripherals = [];
+        let currentTags = [];
+        let editingId = null;
+        let currentViewMode = 'list'; // 'list' or 'grid'
+        let autoSaveEnabled = true;
+        let isElectron = false;
+
+        // Detect Electron environment
+        function detectElectron() {
+            isElectron = typeof window !== 'undefined' && window.electronAPI && window.electronAPI.db;
+            console.log(isElectron ? '🖥️ Running in Electron mode' : '🌐 Running in browser mode');
+            return isElectron;
+        }
+
+        // Storage management functions
+        async function loadFromStorage() {
+            detectElectron();
+            
+            if (isElectron) {
+                // Load from database.json via IPC
+                try {
+                    const data = await window.electronAPI.db.read();
+                    if (data && Array.isArray(data)) {
+                        peripherals = data;
+                        console.log('✓ Loaded from database.json:', peripherals.length, 'items');
+                        showToast(`✓ ${peripherals.length} periféricos carregados do banco de dados`);
+                    }
+                } catch (error) {
+                    console.error('Error loading from database.json:', error);
+                    showToast('⚠️ Erro ao carregar dados do banco', 'error');
+                }
+            } else {
+                // Fallback to in-memory storage
+                // Note: In browser mode outside sandbox, could use localStorage here
+                console.log('📝 Browser mode: Using in-memory storage');
+                console.log('💡 Tip: Use Export/Import JSON for data backup');
+            }
+            
+            renderPeripherals();
+        }
+
+        async function saveToStorage() {
+            if (!autoSaveEnabled) return;
+            
+            if (isElectron) {
+                // Save to database.json via IPC in real-time
+                try {
+                    await window.electronAPI.db.write(peripherals);
+                    console.log('✓ Saved to database.json:', peripherals.length, 'items');
+                    showToast('✓ Dados salvos no banco de dados');
+                } catch (error) {
+                    console.error('Error saving to database.json:', error);
+                    showToast('⚠️ Erro ao salvar no banco de dados', 'error');
+                }
+            } else {
+                // Fallback: in-memory storage
+                // Note: In production browser mode (non-sandbox), localStorage could be used here
+                console.log('✓ Data saved in memory:', peripherals.length, 'items');
+                showToast('✓ Dados salvos em memória');
+            }
+        }
+
+        // Toast notification system
+        function showToast(message, type = 'success') {
+            const existingToast = document.getElementById('toast-notification');
+            if (existingToast) {
+                existingToast.remove();
+            }
+
+            const toast = document.createElement('div');
+            toast.id = 'toast-notification';
+            toast.style.cssText = `
+                position: fixed;
+                bottom: 24px;
+                right: 24px;
+                background: ${type === 'error' ? 'var(--color-error)' : 'var(--color-success)'};
+                color: ${type === 'error' ? 'var(--color-white)' : 'var(--color-btn-primary-text)'};
+                padding: 12px 20px;
+                border-radius: var(--radius-base);
+                box-shadow: var(--shadow-lg);
+                font-size: var(--font-size-base);
+                font-weight: var(--font-weight-medium);
+                z-index: 10001;
+                animation: slideInUp 0.3s ease-out;
+            `;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.animation = 'slideOutDown 0.3s ease-out';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Initialize app
+        (async function initApp() {
+            await loadFromStorage();
+        })();
+
+        // Tab switching (atualizado para incluir Lista/Busca como primeiro tab)
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabName = tab.dataset.tab;
+
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+                tab.classList.add('active');
+                document.getElementById(tabName).classList.add('active');
+                
+                if (tabName === 'lista') {
+                    renderPeripherals();
+                } else if (tabName === 'relatorio') {
+                    renderReport();
+                } else if (tabName === 'cadastro') {
+                    resetForm();
+                }
+            });
+        });
+
+        // Tag input handling
+        const tagInput = document.getElementById('tag-input');
+        const tagContainer = document.getElementById('tag-container');
+
+        tagInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const value = tagInput.value.trim();
+                if (value && !currentTags.includes(value)) {
+                    currentTags.push(value);
+                    renderTags();
+                    tagInput.value = '';
+                }
+            }
+        });
+
+        function renderTags() {
+            const existingTags = tagContainer.querySelectorAll('.tag-item');
+            existingTags.forEach(tag => tag.remove());
+
+            currentTags.forEach((tag, index) => {
+                const tagElement = document.createElement('div');
+                tagElement.className = 'tag-item';
+                tagElement.innerHTML = `
+                    <span>${tag}</span>
+                    <span class="tag-remove" data-index="${index}">×</span>
+                `;
+                tagContainer.insertBefore(tagElement, tagInput);
+            });
+
+            document.querySelectorAll('.tag-remove').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const index = parseInt(e.target.dataset.index);
+                    currentTags.splice(index, 1);
+                    renderTags();
+                });
+            });
+        }
+
+        // Image preview
+        document.getElementById('foto').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    document.getElementById('image-preview').innerHTML = 
+                        `<img src="${event.target.result}" alt="Preview">`;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Form submission
+        document.getElementById('peripheral-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const marca = document.getElementById('marca').value.trim();
+            const nome = document.getElementById('nome').value.trim();
+            const tipo = document.getElementById('tipo').value;
+            const quantidadeValue = document.getElementById('quantidade').value;
+            const quantidade = quantidadeValue ? parseInt(quantidadeValue) : 0;
+            const fotoInput = document.getElementById('foto');
+
+            // Validação: verificar se ao menos um campo foi preenchido
+            if (!marca && !nome && !tipo && currentTags.length === 0 && !quantidadeValue && fotoInput.files.length === 0 && editingId === null) {
+                showMessage('cadastro-message', 'Preencha ao menos um campo antes de salvar!', 'error');
+                return;
+            }
+
+            const savePeripheral = async (fotoBase64) => {
+                const peripheral = {
+                    id: editingId || generateId(),
+                    marca: marca || '',
+                    nome: nome || '',
+                    tipo: tipo || '',
+                    tags: [...currentTags],
+                    quantidade: quantidade || 0,
+                    foto: fotoBase64 || '',
+                    data_cadastro: new Date().toISOString().split('T')[0]
+                };
+
+                if (editingId) {
+                    const index = peripherals.findIndex(p => p.id === editingId);
+                    peripherals[index] = peripheral;
+                    showMessage('cadastro-message', 'Periférico atualizado com sucesso!', 'success');
+                } else {
+                    peripherals.push(peripheral);
+                    showMessage('cadastro-message', 'Periférico cadastrado com sucesso!', 'success');
+                }
+
+                // Save in real-time
+                await saveToStorage();
+                resetForm();
+                renderPeripherals();
+            };
+
+            if (fotoInput.files.length > 0) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    savePeripheral(event.target.result);
+                };
+                reader.readAsDataURL(fotoInput.files[0]);
+            } else {
+                const existingPeripheral = editingId ? peripherals.find(p => p.id === editingId) : null;
+                savePeripheral(existingPeripheral ? existingPeripheral.foto : '');
+            }
+        });
+
+        document.getElementById('cancel-edit').addEventListener('click', resetForm);
+
+        function resetForm() {
+            document.getElementById('peripheral-form').reset();
+            currentTags = [];
+            editingId = null;
+            renderTags();
+            document.getElementById('image-preview').innerHTML = '';
+            document.querySelector('#cadastro h2').textContent = 'Cadastrar Novo Periférico';
+        }
+
+        function generateId() {
+            return 'id-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+        }
+
+        function showMessage(elementId, message, type) {
+            const messageEl = document.getElementById(elementId);
+            messageEl.innerHTML = `<div class="message message-${type}">${message}</div>`;
+            setTimeout(() => {
+                messageEl.innerHTML = '';
+            }, 5000);
+        }
+
+        // View mode toggle
+        document.getElementById('view-list-btn').addEventListener('click', () => {
+            currentViewMode = 'list';
+            document.getElementById('view-list-btn').classList.add('active');
+            document.getElementById('view-grid-btn').classList.remove('active');
+            renderPeripherals();
+        });
+
+        document.getElementById('view-grid-btn').addEventListener('click', () => {
+            currentViewMode = 'grid';
+            document.getElementById('view-grid-btn').classList.add('active');
+            document.getElementById('view-list-btn').classList.remove('active');
+            renderPeripherals();
+        });
+
+        // Busca filtros
+        const searchText = document.getElementById('search-text');
+        const searchTipo = document.getElementById('search-tipo');
+        searchText.addEventListener('input', () => {
+          renderPeripherals();
+        });
+        searchTipo.addEventListener('change', () => {
+          renderPeripherals();
+        });
+
+        function filteredPeripherals() {
+          const text = searchText.value.toLowerCase();
+          const tipo = searchTipo.value;
+          return peripherals.filter(p => {
+            const matchText = !text ||
+                (p.nome && p.nome.toLowerCase().includes(text)) ||
+                (p.marca && p.marca.toLowerCase().includes(text)) ||
+                (p.tags && p.tags.some(tag => tag.toLowerCase().includes(text)));
+            const matchTipo = !tipo || p.tipo === tipo;
+            return matchText && matchTipo;
+          });
+        }
+
+        // Main render function
+        function renderPeripherals() {
+            const filtered = filteredPeripherals();
+            if (currentViewMode === 'list') {
+                document.getElementById('peripheral-table-wrap').classList.remove('hidden');
+                document.getElementById('peripheral-grid').classList.add('hidden');
+                renderPeripheralTable(filtered);
+            } else {
+                document.getElementById('peripheral-table-wrap').classList.add('hidden');
+                document.getElementById('peripheral-grid').classList.remove('hidden');
+                renderPeripheralGrid(filtered);
+            }
+        }
+
+        function renderPeripheralTable(list) {
+          const tbody = document.getElementById('peripheral-table-body');
+          if (!tbody) return;
+          if (list.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="7"><div class='empty-state'><div class='empty-state-icon'>📦</div><p>Nenhum periférico encontrado.</p></div></td></tr>`;
+          } else {
+            tbody.innerHTML = list.map(p => `
+              <tr>
+                <td>${p.foto ? `<img src="${p.foto}" alt="${p.nome || 'Sem nome'}" style="width:48px;height:48px;object-fit:cover;border-radius:8px;">` : '<span style="display:inline-block;width:48px;height:48px;background:var(--color-secondary);border-radius:8px;"></span>'}</td>
+                <td>${p.marca || ''}</td>
+                <td>${p.nome || ''}</td>
+                <td>${p.tipo || ''}</td>
+                <td>${p.tags && p.tags.length > 0 ? p.tags.map(tag => `<span class='peripheral-tag'>${tag}</span>`).join(' ') : ''}</td>
+                <td>${p.quantidade || 0}</td>
+                <td>
+                  <button class="btn btn-secondary btn-small" onclick="editPeripheral('${p.id}')">✏️</button>
+                  <button class="btn btn-danger btn-small" onclick="openDeleteDialog('${p.id}')">🗑️</button>
+                </td>
+              </tr>
+            `).join('');
+          }
+        }
+
+        function renderPeripheralGrid(list) {
+            const gridContainer = document.getElementById('peripheral-grid');
+            if (!gridContainer) return;
+            if (list.length === 0) {
+                gridContainer.innerHTML = `
+                    <div class='empty-state' style='grid-column: 1 / -1;'>
+                        <div class='empty-state-icon'>📦</div>
+                        <p>Nenhum periférico encontrado.</p>
+                    </div>
+                `;
+            } else {
+                gridContainer.innerHTML = list.map(p => `
+                    <div class="peripheral-grid-card">
+                        ${p.foto ? `<img src="${p.foto}" alt="${p.nome || 'Sem nome'}" class="peripheral-grid-image">` : '<div class="peripheral-grid-image"></div>'}
+                        ${p.marca ? `<div class="peripheral-grid-brand">${p.marca}</div>` : ''}
+                        <div class="peripheral-grid-name">${p.nome || 'Sem nome'}</div>
+                        ${p.tipo ? `<div class="peripheral-grid-type">${p.tipo}</div>` : ''}
+                        ${p.tags && p.tags.length > 0 ? `
+                            <div class="peripheral-grid-tags">
+                                ${p.tags.map(tag => `<span class='peripheral-tag'>${tag}</span>`).join('')}
+                            </div>
+                        ` : ''}
+                        <div class="peripheral-grid-quantity">Quantidade: ${p.quantidade || 0}</div>
+                        <div class="peripheral-grid-actions">
+                            <button class="btn btn-secondary btn-small" onclick="editPeripheral('${p.id}')">✏️ Editar</button>
+                            <button class="btn btn-danger btn-small" onclick="openDeleteDialog('${p.id}')">🗑️ Deletar</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Inicial render
+        renderPeripherals();
+        
+
+        // Edit peripheral
+        window.editPeripheral = function(id) {
+            const peripheral = peripherals.find(p => p.id === id);
+            if (!peripheral) return;
+
+            editingId = id;
+            document.getElementById('marca').value = peripheral.marca;
+            document.getElementById('nome').value = peripheral.nome;
+            document.getElementById('tipo').value = peripheral.tipo;
+            document.getElementById('quantidade').value = peripheral.quantidade;
+            currentTags = [...(peripheral.tags || [])];
+            renderTags();
+            if (peripheral.foto) {
+                document.getElementById('image-preview').innerHTML = 
+                    `<img src="${peripheral.foto}" alt="Preview">`;
+            } else {
+                document.getElementById('image-preview').innerHTML = '';
+            }
+            document.querySelector('#cadastro h2').textContent = 'Editar Periférico';
+
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelector('[data-tab="cadastro"]').classList.add('active');
+            document.getElementById('cadastro').classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        // MODAL de confirmação para deletar
+        function createDeleteModal() {
+            if (document.getElementById('delete-modal')) return;
+            const modal = document.createElement('div');
+            modal.id = 'delete-modal';
+            modal.style = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.28);display:flex;align-items:center;justify-content:center;z-index:10000;';
+            modal.innerHTML = `
+              <div style="background:var(--color-surface);padding:32px;box-shadow:var(--shadow-md);border-radius:var(--radius-lg);min-width:300px;max-width:90vw;text-align:center;">
+                <h3 style='font-size:var(--font-size-lg);margin-bottom:16px;color:var(--color-error);'><span style="font-size:1.4em;">🗑️</span> Deletar periférico?</h3>
+                <p>Esta ação é irreversível. Tem certeza que deseja remover?</p>
+                <div style="margin-top:24px; display:flex;gap:16px;justify-content:center;">
+                  <button class="btn btn-danger" id="confirm-delete-btn">Sim, Deletar</button>
+                  <button class="btn btn-secondary" id="cancel-delete-btn">Cancelar</button>
+                </div>
+              </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        let toDeleteId = null;
+        window.openDeleteDialog = function(id) {
+            toDeleteId = id;
+            createDeleteModal();
+            document.getElementById('confirm-delete-btn').onclick = confirmDeletePeripheral;
+            document.getElementById('cancel-delete-btn').onclick = closeDeleteModal;
+        };
+        async function confirmDeletePeripheral() {
+            peripherals = peripherals.filter(p => p.id !== toDeleteId);
+            toDeleteId = null;
+            await saveToStorage();
+            closeDeleteModal();
+            renderPeripherals();
+            showMessage('lista-message', 'Periférico deletado com sucesso!', 'success');
+        }
+        function closeDeleteModal() {
+            const modal = document.getElementById('delete-modal');
+            if (modal) modal.remove();
+        }
+
+
+
+        // Report generation
+        function renderReport() {
+            const totalItems = peripherals.length;
+            const totalStock = peripherals.reduce((sum, p) => sum + p.quantidade, 0);
+            
+            const typeCount = {};
+            peripherals.forEach(p => {
+                typeCount[p.tipo] = (typeCount[p.tipo] || 0) + p.quantidade;
+            });
+            const totalTypes = Object.keys(typeCount).length;
+
+            document.getElementById('total-items').textContent = totalItems;
+            document.getElementById('total-types').textContent = totalTypes;
+            document.getElementById('total-stock').textContent = totalStock;
+
+            const typeCountsContainer = document.getElementById('type-counts');
+            if (Object.keys(typeCount).length === 0) {
+                typeCountsContainer.innerHTML = '<p style="color: var(--color-text-secondary);">Nenhum dado disponível.</p>';
+            } else {
+                typeCountsContainer.innerHTML = Object.entries(typeCount)
+                    .sort((a, b) => b[1] - a[1])
+                    .map(([tipo, count]) => `
+                        <div class="type-count">
+                            <span class="type-name">${tipo}</span>
+                            <span class="type-value">${count}</span>
+                        </div>
+                    `).join('');
+            }
+
+            const reportListContainer = document.getElementById('report-list');
+            if (peripherals.length === 0) {
+                reportListContainer.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1 / -1;">
+                        <div class="empty-state-icon">📊</div>
+                        <p>Nenhum dado para exibir no relatório.</p>
+                    </div>
+                `;
+            } else {
+                reportListContainer.innerHTML = peripherals.map(p => `
+                    <div class="peripheral-card">
+                        ${p.foto ? `<img src="${p.foto}" alt="${p.nome || 'Sem nome'}" class="peripheral-image">` : '<div class="peripheral-image"></div>'}
+                        <div class="peripheral-title">${p.nome || 'Sem nome'}</div>
+                        ${p.marca ? `<div class="peripheral-brand">${p.marca}</div>` : ''}
+                        ${p.tipo ? `<div class="peripheral-type">${p.tipo}</div>` : ''}
+                        <div class="peripheral-quantity">Quantidade: ${p.quantidade || 0}</div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Export JSON
+        document.getElementById('export-json').addEventListener('click', () => {
+            if (peripherals.length === 0) {
+                showToast('Não há dados para exportar!', 'error');
+                return;
+            }
+
+            const dataStr = JSON.stringify(peripherals, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `perifericos-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+            showToast('✓ Dados exportados com sucesso!');
+        });
+
+        // Import JSON
+        document.getElementById('import-json-btn').addEventListener('click', () => {
+            document.getElementById('import-json').click();
+        });
+
+        document.getElementById('import-json').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = async (event) => {
+                try {
+                    const importedData = JSON.parse(event.target.result);
+                    if (Array.isArray(importedData)) {
+                        peripherals = importedData;
+                        await saveToStorage();
+                        renderPeripherals();
+                        renderReport();
+                        showToast(`✓ ${peripherals.length} periféricos importados com sucesso!`);
+                    } else {
+                        showToast('Formato de arquivo inválido!', 'error');
+                    }
+                } catch (error) {
+                    showToast('Erro ao importar arquivo JSON!', 'error');
+                }
+            };
+            reader.readAsText(file);
+            e.target.value = '';
+        });
+
+
+    </script>
+</body>
+</html>
