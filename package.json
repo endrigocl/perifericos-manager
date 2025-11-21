@@ -1,0 +1,45 @@
+{
+  "name": "perifericos-manager",
+  "version": "1.0.0",
+  "description": "Gerenciador de Periféricos com banco de dados JSON local",
+  "main": "main.js",
+  "author": "Endrigo / Driftweb",
+  "license": "MIT",
+  "homepage": "https://driftweb.com.br",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder",
+    "build-win": "electron-builder --win --publish never"
+  },
+  "dependencies": {
+    "electron-squirrel-startup": "^1.1.0"
+  },
+  "devDependencies": {
+    "electron": "^latest",
+    "electron-builder": "^latest"
+  },
+  "build": {
+    "appId": "com.driftweb.perifericos-manager",
+    "productName": "Gerenciador de Periféricos",
+    "files": [
+      "main.js",
+      "preload.js",
+      "index.html",
+      "database.json"
+    ],
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Gerenciador de Periféricos"
+    }
+  }
+}
